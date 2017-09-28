@@ -1,0 +1,23 @@
+{
+    "name": "your-name-here/SamlAuthenticationPlugin",
+    "description": "SamAuthenticate plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "require": {
+        "cakephp/cakephp": "^3.4",
+        "onelogin/php-saml": "^2.11.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SamlAuthenticationPlugin\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SamlAuthenticationPlugin\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
