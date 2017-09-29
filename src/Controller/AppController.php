@@ -4,30 +4,31 @@ namespace SamlAuthenticationPlugin\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
+/**
+ * アプリケーションコントローラー
+ */
 class AppController extends Controller
 {
     /**
      * 初期設定
-     * @return [type] [description]
      */
     public function initialize()
     {
         parent::initialize();
         // 認証機能設定
         $this->loadComponent('Auth', [
+            // 認証アクション
             'loginAction' => [
                 'controller' => 'Sso',
                 'action' => 'login',
             ],
-            'authError' => '認証が必要です。',
-            'storage' => 'Session',
-            'authenticate' => [
-                'SamlAuthenticationPlugin.Saml' => [
-                    'fields' => ['username' => 'mail_address'],
-                    'userModel' => 'Users',
-                    'finder' => 'user'
-                ]
-            ]
+            // 認証後リダイレクト先
+            'loginRedirect' => [
+                'controller' => 'Sso',
+                'action' => 'index'
+            ],
+            // SAML認証指定
+            'authenticate' => ['SamlAuthenticationPlugin.Saml']
         ]);
     }
 }

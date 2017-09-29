@@ -3,10 +3,13 @@ namespace SamlAuthenticationPlugin\Controller;
 
 use Cake\Event\Event;
 
+/**
+ * SSO認証コントローラー
+ */
 class SsoController extends AppController
 {
     /**
-    * [beforeFilter description]
+    * フィルタ実行前処理
     * @return [type] [description]
     */
     public function beforeFilter(Event $event)
@@ -18,7 +21,17 @@ class SsoController extends AppController
     }
 
     /**
-     * [login description]
+     * 認証後参照可能となる画面
+     * @return [type] [description]
+     */
+    public function index()
+    {
+        $this->set('user', $this->Auth->user());
+        $this->render('SamlAuthenticationPlugin.index');
+    }
+
+    /**
+     * 認証処理
      * @return [type] [description]
      */
     public function login()
@@ -30,23 +43,24 @@ class SsoController extends AppController
         }
         else
         {
-            $this->Flash->error(__('シングルサインオン出来ません。通常ログインをご検討ください。'));
+            $this->Flash->error(__('シングルサインオン出来ません。'));
         }
 
         return $this->redirect($this->Auth->redirectUrl());
     }
 
     /**
-     * [logout description]
+     * ログアウト処理
      * @return [type] [description]
      */
     public function logout()
     {
         $this->Auth->logout();
+        $this->render('SamlAuthenticationPlugin.logout');
     }
 
     /**
-     * [metadata description]
+     * メタデータXML出力処理
      * @return [type] [description]
      */
     public function metadata()
@@ -54,7 +68,7 @@ class SsoController extends AppController
         $response = $this->response;
         $response->type('xml');
         $response->body(
-            $this->Auth->getAuthenticate('Saml')->getMetadata()
+            $this->Auth->getAuthenticate('SamlAuthenticationPlugin.Saml')->getMetadata()
         );
 
         return $response;

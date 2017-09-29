@@ -6,6 +6,7 @@ use Cake\Auth\BaseAuthenticate;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use \OneLogin_Saml2_Auth;
 use \OneLogin_Saml2_Error;
 
@@ -66,41 +67,12 @@ class SamlAuthenticate extends BaseAuthenticate
         $request->session()->write('samlSessionIndex', $this->_saml->getSessionIndex());
         $request->session()->write('samlNameIdFormat', $this->_saml->getNameIdFormat());
 
-        $user = $this->_findUser($this->_saml->getNameId());
-        if (empty($user))
-        {
-            return $this->_insert($this->_saml->getNameId());
-        }
-        else
-        {
-            return $user;
-        }
-    }
-
-    /**
-     * [_insert description]
-     * @return [type] [description]
-     */
-    public function _insert($username)
-    {
-        $config = $this->_config;
-        $table = TableRegistry::get($config['userModel']);
-
-        $user = $table->newEntity([
-            $table->aliasField($config['fields']['username']) => $username
-        ]);
-
-        if ($table->save($user))
-        {
-            return $user;
-        }
-        else
-        {
-            throw new OneLogin_Saml2_Error(
-                'Invalid Save User: '.implode(', ', $table->errors()),
-                OneLogin_Saml2_Error::METADATA_SP_INVALID
-            );
-        }
+        return [
+            'NameId' => $this->_saml->getNameId(),
+            'NameIdFormat' => $this->_saml->getNameIdFormat(),
+            'SessionIndex' => $this->_saml->getSessionIndex(),
+            'Attributes' => $this->_saml->getAttributes(),
+        ];
     }
 
     /**
