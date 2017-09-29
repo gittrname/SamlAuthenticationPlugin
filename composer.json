@@ -1,5 +1,5 @@
 {
-    "name": "your-name-here/SamlAuthenticationPlugin",
+    "name": "gittrname/SamlAuthenticationPlugin",
     "description": "SamAuthenticate plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
